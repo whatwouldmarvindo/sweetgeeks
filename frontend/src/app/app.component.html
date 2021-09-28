@@ -11,38 +11,33 @@
         type="search"
       />
       <mat-autocomplete (optionSelected)="onSelectItem()" #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let stadt of filteredStaedte | async"
-          [value]="stadt"
-        >
+        <mat-option *ngFor="let stadt of filteredStaedte | async" [value]="stadt">
           {{ stadt }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
 
     <div id="search-options">
-      <div class="search-option">
-
-      </div>
+      <div class="search-option"></div>
     </div>
-
   </form>
 
-  <div class="solar-answer hidden" #solarFacts>
-    <p id="introduction-tag">
-      Wenn alle Dachflächen in {{ selectedStadt }} mit Solarenergie ausgebaut
-      werden, könnten:
+  <div *ngIf="antwortIstDa" [@inOutAnimation] class="solar-answer" #solarFacts>
+    <p id="solar-introduction">
+      Wenn alle Dachflächen in {{ selectedStadt }} mit Solarenergie ausgebaut werden, könnten:
     </p>
-    <p id="calculation"><span>3,5t</span> CO-2 eingespart werden.</p>
-    <p id="calculation">
-      <span>75%</span> der benötigten Energie aus Solarstrom hergestellt werden.
-    </p>
+    <p class="flex-right"><span>3,5t</span> CO-2 eingespart werden.</p>
+    <p class="flex-left"><span>75%</span> der benötigten Energie aus Solarstrom hergestellt werden.</p>
 
-    <p id="calculation">
-      Strom im Wert von <span>125.123€</span> durch Sonnenenergie hergestellt
-      werden.
-    </p>
+    <p class="flex-right">Strom im Wert von <span>125.123€</span> durch Sonnenenergie hergestellt werden.</p>
 
     <button mat-button (click)="reset()">reset</button>
+
+    <div id="moeglicheGebäude">
+    <p>Mögliche Gebäude und </p>
+      <ul>
+        <li>Rathaus</li>
+      </ul>
+    </div>
   </div>
 </div>

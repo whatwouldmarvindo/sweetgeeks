@@ -1,4 +1,4 @@
-@import "../styles.scss";
+@import '../styles.scss';
 
 :host {
   display: flex;
@@ -6,7 +6,6 @@
   align-items: center;
   height: 100%;
 }
-
 
 .hidden {
   opacity: 0;
@@ -34,15 +33,32 @@
   }
 }
 
-#introduction-tag {
-  margin-top: 4rem;
-}
-
 .solar-answer {
+  display: flex;
+  flex-direction: column;
   font-size: large;
+  gap: 15px;
+  margin-top: 4rem;
+  p {
+    line-height: initial;
+    width: 60%;
+  }
+
+  .flex-right {
+    align-self: flex-end;
+  }
+
+  .flex-left {
+    align-self: flex-start;
+  }
+
   span {
     font-size: xx-large;
     font-weight: 600;
     color: $primary;
+  }
+
+  #solar-introduction {
+    width: 100%;
   }
 }
