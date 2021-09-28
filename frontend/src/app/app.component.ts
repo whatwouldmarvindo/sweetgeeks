@@ -12,6 +12,7 @@ export interface alldata {
   co2Einsparung?: number
   kostenEinsparung?: number
   gesamtVerbrauch?: number
+  anteil?: number
 }
 export interface building {
   adresse: string
@@ -68,17 +69,20 @@ export class AppComponent {
   }
 
   apiCall(stadt: string) {
-    return this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`).pipe(map((res: any) => {
-      const data: alldata = {
-        buildings: res
-      }
-      data.gesamtkwh = this.berechnetGesamtKwha(res)
-      data.kostenEinsparung = data.gesamtkwh * 0.31
-      data.co2Einsparung = data.gesamtkwh * 366
-      data.gesamtVerbrauch = 513
-      console.log(data)
-      return data
-    })) as Observable<alldata>
+    return this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`).pipe(
+      map((res: any) => {
+        const data: alldata = {
+          buildings: res,
+        }
+        data.gesamtkwh = this.berechnetGesamtKwha(res)
+        data.kostenEinsparung = data.gesamtkwh * 0.31
+        data.co2Einsparung = (data.gesamtkwh * 366) / 1000 / 1000
+        data.gesamtVerbrauch = 513
+        data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch, data.gesamtkwh)
+        console.log(data)
+        return data
+      })
+    ) as Observable<alldata>
   }
 
   cssAnimation() {
@@ -87,10 +91,14 @@ export class AppComponent {
     divEl.style.marginTop = '2rem'
   }
 
-  berechnetGesamtKwha(buildings: building[], filters?: string[]): number {
-    return buildings.reduce((prev: building, curr: any) => {
-      return {...curr, str_17: prev.str_17 + curr.str_17}
-    }).str_17
+  anteilAnGesamtVerbrauch(gesamtVerbrauch: number, potential: number): number {
+    console.log(gesamtVerbrauch, potential)
+    return potential / 1000 / gesamtVerbrauch
   }
 
+  berechnetGesamtKwha(buildings: building[], filters?: string[]): number {
+    return buildings.reduce((prev: building, curr: any) => {
+      return { ...curr, str_17: prev.str_17 + curr.str_17 }
+    }).str_17
+  }
 }

@@ -24,18 +24,27 @@
 
   <div *ngIf="httpAnswer$ | async as data" [@inOutAnimation] class="solar-answer" #solarFacts>
     <p id="solar-introduction">
-      Wenn alle Dachflächen in {{ selectedStadt }} mit Solarenergie ausgebaut werden, würde innerhalb eines Jahres:
+      Wenn alle Dachflächen in <span>{{ selectedStadt }}</span> mit Solarenergie ausgebaut werden,
+      würde innerhalb eines Jahres:
     </p>
-    {{data | json}}
-    <p class="flex-right"><span>{{data?.co2Einsparung}} gramm</span> CO-2 eingespart werden.</p>
-    <p class="flex-left"><span>75%</span> der benötigten Energie aus Solarstrom hergestellt werden.</p>
+    <!-- {{data | json}} -->
+    <p class="flex-right">
+      <span>{{ data?.co2Einsparung | number:'1.0-0' }} t</span> CO-2 eingespart werden.
+    </p>
+    <p class="flex-left">
+      <span>{{ data.anteil | number:'1.0-0' }} % </span> der benötigten Energie aus Solarstrom hergestellt
+      werden.
+    </p>
 
-    <p class="flex-right">Strom im Wert von <span>{{data?.kostenEinsparung}}€</span> durch Sonnenenergie hergestellt werden.</p>
+    <p class="flex-right">
+      Strom im Wert von <span>{{ data?.kostenEinsparung | number:'1.0-0' }}€</span> durch Sonnenenergie
+      hergestellt werden.
+    </p>
 
     <div id="moeglicheGebäude">
-    <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
+      <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
       <ul>
-        <li *ngFor="let b of data.buildings">{{b.name}}</li>
+        <li *ngFor="let b of data.buildings">{{ b.name }}</li>
       </ul>
     </div>
   </div>
