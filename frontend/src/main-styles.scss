@@ -1,7 +1,3 @@
-
-@use '~@angular/material' as mat;
-
-@include mat.core();
 $md-geeks: (
   50: #e3fcf5,
   100: #b9f6e5,
@@ -45,10 +41,3 @@ $my-custom-theme: mat.define-light-theme(
   $my-custom-accent,
   $my-custom-warn
 );
-
-@include mat.all-component-themes($my-custom-theme);
-
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
