@@ -38,9 +38,10 @@
   margin-top: 4rem;
 }
 
-#calculation {
+.solar-answer {
+  font-size: large;
   span {
-    font-size: x-large;
+    font-size: xx-large;
     font-weight: 600;
     color: $primary;
   }

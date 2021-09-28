@@ -1,13 +1,13 @@
 <div class="container" #container>
   <form class="search-field" #searchbar>
     <mat-form-field id="search" appearance="outline">
-      <mat-label>Suche nach einer Stadt in NRW</mat-label>
+      <mat-label>Wähle eine Stadt in NRW</mat-label>
       <input
+        autofocus="autofocus"
         [formControl]="stadtInput"
-        aria-label="Suche eine Stadt"
+        aria-label="Wähle eine Stadt"
         [matAutocomplete]="auto"
         matInput
-        (submit)="onSelectItem()"
         type="search"
       />
       <mat-autocomplete (optionSelected)="onSelectItem()" #auto="matAutocomplete">
@@ -19,6 +19,13 @@
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+
+    <div id="search-options">
+      <div class="search-option">
+
+      </div>
+    </div>
+
   </form>
 
   <div class="solar-answer hidden" #solarFacts>
