@@ -1,3 +1,4 @@
+@import '../styles.scss';
 .main-frame {
   display: flex;
   flex-direction: column;
@@ -22,5 +23,6 @@
   span {
     font-size: x-large;
     font-weight: 600;
+    color: $primary;
   }
 }

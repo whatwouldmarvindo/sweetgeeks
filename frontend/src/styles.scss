@@ -35,6 +35,8 @@ $md-geeks: (
   )
 );
 
+$primary: #06cf7d;
+
 /* ======== Angular material custom themes ======== */
 $my-custom-primary: mat.define-palette($md-geeks);
 $my-custom-accent: mat.define-palette(mat.$pink-palette, 100, 500, A100);

@@ -1,11 +1,16 @@
 <div class="main-frame">
-  <div class="search-field">
+  <form class="search-field">
     <mat-form-field >
       <mat-label>Search for a location</mat-label>
-      <input matInput type="search">
+      <input [formControl]="stadtInput" aria-label="Suche eine Stadt" [matAutocomplete]="auto" matInput (submit)="submitting()" type="search">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let stadt of filteredStaedte | async" [value]="stadt">
+          {{stadt}}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
-    <button mat-stroked-button type="submit">Submit</button>
-  </div>
+    <!-- <button mat-stroked-button type="submit">Submit</button> -->
+  </form>
 
   <p id="introduction-tag">
     Wenn alle Dachflächen der Stadt? mit Solarenergie ausgebaut werden, könnten:
