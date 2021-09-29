@@ -53,7 +53,9 @@
     <div id="moeglicheGebäude">
       <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
       <ul>
-        <li *ngFor="let b of data.buildings">{{ b.name }}</li>
+        <div *ngFor="let b of data.buildings">
+          <li *ngIf="b.name">{{ b.name }}</li>
+        </div>
       </ul>
     </div>
   </div>
