@@ -61,12 +61,12 @@ def parse(files):
                 #print(combined_building)
                 combined_buildings.append(combined_building)
 
-        # Serializing json 
-        json_object = json.dumps(combined_buildings, ensure_ascii=False)
+        # Serializing json
+        json_object = json.dumps(combined_buildings)
     
         # Writing to sample.json
         filename = "../response_" + city + ".json"
-        with open(filename, "w") as outfile:
+        with open(filename, "w", encoding="utf8") as outfile:
             outfile.write(json_object)
 
 
