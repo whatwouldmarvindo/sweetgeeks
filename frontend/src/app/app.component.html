@@ -54,7 +54,7 @@
       <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
       <ul>
         <div *ngFor="let b of data.buildings">
-          <li *ngIf="b.name">{{ b.name }}</li>
+          <li *ngIf="b.name">{{ b.name | utf8}}</li>
         </div>
       </ul>
     </div>
