@@ -167,7 +167,7 @@ export const Staedte: String[] = [
   'Iserlohn',
   'Isselburg',
   'Issum',
-  'Jüchen',
+  'Juechen',
   'Jülich',
   'Kaarst',
   'Kalkar',

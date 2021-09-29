@@ -105,8 +105,9 @@ export class AppComponent implements OnInit {
         data.gesamtkwh = this.berechnetGesamtKwha(buildings)
         data.kostenEinsparung = data.gesamtkwh * 0.31
         data.co2Einsparung = (data.gesamtkwh * 366) / 1000 / 1000
-        data.gesamtVerbrauch = 513
-        data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch, data.gesamtkwh)
+        if(stadt.toLowerCase() == 'grevenbroich') data.gesamtVerbrauch = 513
+        if(stadt.toLowerCase() == 'juechen') data.gesamtVerbrauch = 188
+        data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch as number, data.gesamtkwh)
         return data
       })
     ) as Observable<alldata>
