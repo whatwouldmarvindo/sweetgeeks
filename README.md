@@ -25,7 +25,7 @@ Dieser gekürzte Datensatz wird nun dem Frontend zur Verfügung gestellt.
 
 ## Datenquellen:
 
-Solarkatster von Opengeodata NRW
+Solarkatster vom Landesamt für Natur, Umwelt und Verbraucherschutz NRW
 https://www.opengeodata.nrw.de/produkte/umwelt_klima/klima/solarkataster/photovoltaik/
 
 Overpass API für OSM
