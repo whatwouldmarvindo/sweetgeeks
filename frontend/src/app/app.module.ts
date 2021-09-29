@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from "@angular/material/button";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +28,7 @@ registerLocaleData(localeDe);
     MatFormFieldModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatSlideToggleModule,
     HttpClientModule
   ],
   providers: [{ provide: LOCALE_ID, useValue: 'de-DE'}],
