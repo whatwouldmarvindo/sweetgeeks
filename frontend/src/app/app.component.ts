@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Observable } from 'rxjs'
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms'
+import { combineLatest, Observable } from 'rxjs'
 import { startWith, map, skipWhile, tap } from 'rxjs/operators'
 import { Staedte } from './staedte'
 import { HttpClient } from '@angular/common/http'
@@ -47,41 +47,31 @@ export class AppComponent implements OnInit {
   @ViewChild('container') container: ElementRef | undefined
   @ViewChild('solarFacts') solarFacts: ElementRef | undefined
   stadtInput = new FormControl()
-  tglBildung = true
-  tglKindergarten = true
-  tglSicherheit = true
+  filters: string[] = []
   formGroup: FormGroup = this.fb.group({
-    tglBildung: 'true',
-    tglKindergarten: 'true',
-    tglSicherheit: 'true'
-  });
+    schooling: true,
+    kindergarten: true,
+    security: true,
+    government: true,
+  })
   toggleType = new FormControl(', []')
   title = 'SweetGeeks'
-  filteredStaedte: Observable<String[]> = this.stadtInput.valueChanges.pipe(
+
+  filteredStaedte$: Observable<String[]> = this.stadtInput.valueChanges.pipe(
     startWith(''),
     skipWhile((v) => v.length < 1),
     map((stadt) => (stadt ? this._filter(stadt) : Staedte.slice()))
-    )
-    constructor(private http: HttpClient, private fb: FormBuilder) {
-  
-    }
+  )
+  constructor(private http: HttpClient, private fb: FormBuilder) {}
   httpAnswer$: Observable<alldata> | undefined
   selectedStadt = ''
 
-
   ngOnInit(): void {
-
   }
 
   onTypeSelectSubmit() {
     this.selectedStadt = this.stadtInput.value
-    var filters = []
-    
-    if(!this.formGroup.controls['tglBildung'].value) filters.push("schooling")
-    if(!this.formGroup.controls['tglKindergarten'].value) filters.push("kindergarten")
-    if(!this.formGroup.controls['tglSicherheit'].value) filters.push("security")
-
-    this.httpAnswer$ = this.apiCall(this.selectedStadt.toLowerCase(),filters)
+    this.httpAnswer$ = this.apiCall(this.selectedStadt.toLowerCase())
   }
 
   private _filter(name: string): String[] {
@@ -89,40 +79,47 @@ export class AppComponent implements OnInit {
     return Staedte.filter((option) => option.toLowerCase().includes(filterValue))
   }
 
-  onSelectItem() {
+  onSelectStadt() {
     this.selectedStadt = this.stadtInput.value
     this.httpAnswer$ = this.apiCall(this.selectedStadt.toLowerCase())
     this.cssAnimation()
   }
 
+  ngOnDestroy(): void {}
 
- ngOnDestroy():void {
-
-}
-
-  apiCall(stadt: string, filter?:string[]) {
-    return this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`).pipe(
-      map((res: any) => {
+  apiCall(stadt: string, filter?: string[]) {
+    const call$ = this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`)
+    const v$ = this.formGroup.valueChanges.pipe(
+      startWith({
+        schooling: true,
+        kindergarten: true,
+        security: true,
+        government: true
+      })
+    )
+    return combineLatest(call$, v$).pipe(
+      map(([res, filter]: any) => {
+        const buildings = res.filter((b: building) => filter[b.type]);
         const data: alldata = {
-          buildings: res
+          buildings: buildings,
         }
-        data.gesamtkwh = this.berechnetGesamtKwha(res)
+        data.gesamtkwh = this.berechnetGesamtKwha(buildings)
         data.kostenEinsparung = data.gesamtkwh * 0.31
         data.co2Einsparung = (data.gesamtkwh * 366) / 1000 / 1000
         data.gesamtVerbrauch = 513
         data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch, data.gesamtkwh)
         //Hier am besten ne Filterfunktion nehmen, war zu müde :D
-    
-        if(filter) {
-          console.log("Filter: ")
-          console.log(filter)
-          var builds = []
-          for(var build of data.buildings){
-            if (!(build.type in filter)) builds.push(build)
-          }
-          data.buildings = builds
-        }
-        console.log(data.buildings[0].type)
+
+        // if (filter) {
+        //   console.log('Filter: ')
+        //   console.log(filter)
+        //   var builds = []
+        //   for (var build of data.buildings) {
+        //     if (!(build.type in filter)) builds.push(build)
+        //   }
+        //   data.buildings = builds
+        // }
+        // console.log(data.buildings[0].type)
         return data
       })
     ) as Observable<alldata>
@@ -142,6 +139,6 @@ export class AppComponent implements OnInit {
   berechnetGesamtKwha(buildings: building[], filters?: string[]): number {
     return buildings.reduce((prev: building, curr: any) => {
       return { ...curr, str_17: prev.str_17 + curr.str_17 }
-    }).str_17
+    }, {str_17: 0} as building).str_17
   }
 }

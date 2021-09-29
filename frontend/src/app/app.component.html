@@ -10,16 +10,25 @@
         matInput
         type="search"
       />
-      <mat-autocomplete (optionSelected)="onSelectItem()" #auto="matAutocomplete">
-        <mat-option *ngFor="let stadt of filteredStaedte | async" [value]="stadt">
+      <mat-autocomplete (optionSelected)="onSelectStadt()" #auto="matAutocomplete">
+        <mat-option *ngFor="let stadt of filteredStaedte$ | async" [value]="stadt">
           {{ stadt }}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
+      <form
+        class="typeSelectForm"
+        [formGroup]="formGroup"
+        (ngSubmit)="onTypeSelectSubmit()"
+        ngNativeValidate
+      >
+        <mat-slide-toggle color="primary" formControlName="schooling">Bildungswesen</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="kindergarten">Kindergarten</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="security">Sicherheit</mat-slide-toggle>
+        <mat-slide-toggle color="primary" formControlName="government">Verwaltung</mat-slide-toggle>
 
-    <div id="search-options">
-      <div class="search-option"></div>
-    </div>
+        <!-- <button mat-raised-button type="submit">TEST</button> -->
+      </form>
   </form>
 
   <div *ngIf="httpAnswer$ | async as data" [@inOutAnimation] class="solar-answer" #solarFacts>
@@ -29,30 +38,17 @@
     </p>
     <!-- {{data | json}} -->
     <p class="flex-right">
-      <span>{{ data?.co2Einsparung | number:'1.0-0' }} t</span> CO-2 eingespart werden.
+      <span>{{ data?.co2Einsparung | number: '1.0-0' }} t</span> CO-2 eingespart werden.
     </p>
     <p class="flex-left">
-      <span>{{ data.anteil | number:'1.0-0' }} % </span> der benötigten Energie aus Solarstrom hergestellt
-      werden.
-    </p>
-
-    <p class="flex-right">
-      Strom im Wert von <span>{{ data?.kostenEinsparung | number:'1.0-0' }}€</span> durch Sonnenenergie
+      <span>{{ data.anteil | number: '1.0-0' }} % </span> der benötigten Energie aus Solarstrom
       hergestellt werden.
     </p>
 
-    <div id="typeButtons">
-
-      <form class="typeSelectForm" [formGroup]="formGroup" (ngSubmit)="onTypeSelectSubmit()" ngNativeValidate>
-
-        <mat-slide-toggle formControlName="tglBildung">Bildungswesen</mat-slide-toggle>
-        <mat-slide-toggle formControlName="tglKindergarten">Kindergarten</mat-slide-toggle>
-        <mat-slide-toggle formControlName="tglSicherheit">Sicherheit</mat-slide-toggle>
-
-        <button mat-raised-button type="submit">TEST</button>
-      </form>
-      
-    </div>
+    <p class="flex-right">
+      Strom im Wert von <span>{{ data?.kostenEinsparung | number: '1.0-0' }}€</span> durch
+      Sonnenenergie hergestellt werden.
+    </p>
 
     <div id="moeglicheGebäude">
       <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
