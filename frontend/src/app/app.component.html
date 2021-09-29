@@ -41,6 +41,19 @@
       hergestellt werden.
     </p>
 
+    <div id="typeButtons">
+
+      <form class="typeSelectForm" [formGroup]="formGroup" (ngSubmit)="onTypeSelectSubmit()" ngNativeValidate>
+
+        <mat-slide-toggle formControlName="tglBildung">Bildungswesen</mat-slide-toggle>
+        <mat-slide-toggle formControlName="tglKindergarten">Kindergarten</mat-slide-toggle>
+        <mat-slide-toggle formControlName="tglSicherheit">Sicherheit</mat-slide-toggle>
+
+        <button mat-raised-button type="submit">TEST</button>
+      </form>
+      
+    </div>
+
     <div id="moeglicheGebäude">
       <p>Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</p>
       <ul>
