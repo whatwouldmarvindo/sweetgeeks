@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
 
   ngOnDestroy(): void {}
 
-  apiCall(stadt: string, filter?: string[]) {
+  apiCall(stadt: string, filter?: string[]): Observable<alldata> | undefined {
     const call$ = this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`)
     const v$ = this.formGroup.valueChanges.pipe(
       startWith({

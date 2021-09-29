@@ -33,12 +33,48 @@
   }
 }
 
+img.logo {
+  width: auto;
+  height: 5rem;
+  align-self: flex-end;
+}
+
 .solar-answer {
   display: flex;
   flex-direction: column;
   font-size: large;
   gap: 15px;
   margin-top: 4rem;
+
+  .antworten {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    div {
+      margin-top: 30px;
+      margin-bottom: 100px;
+      width: 25%;
+      // border: 1px solid black;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+
+      img {
+        align-self: center;
+        height: 150px;
+        width: auto;
+        margin-bottom: 2rem;
+      }
+
+      span.fact {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
   p {
     line-height: initial;
     width: 60%;
@@ -61,8 +97,14 @@
   }
 
   #solar-introduction {
+    margin-top: 50px;
     width: 100%;
   }
+}
+
+.mat-elevation-z2 {
+  padding: 20px;
+  border-radius: 15px;
 }
 
 .typeSelectForm {
@@ -74,6 +116,10 @@
 
 .collabsible {
   margin-bottom: 10px;
+
+  .collabse-container {
+    margin-bottom: 3px;
+  }
 }
 
 span.hint {
@@ -86,4 +132,9 @@ span.hint {
   h3 {
     font-size: large;
   }
+}
+
+ul {
+  margin: 0;
+  padding: 0;
 }

@@ -1,4 +1,5 @@
 <div class="container" #container>
+  <img src="../assets/logo.png" class="logo" />
   <form class="search-field" #searchbar>
     <mat-form-field id="search" appearance="outline">
       <mat-label>Wähle eine Stadt in NRW</mat-label>
@@ -17,6 +18,7 @@
       </mat-autocomplete>
     </mat-form-field>
     <form
+      *ngIf="httpAnswer$"
       class="typeSelectForm"
       [formGroup]="formGroup"
       (ngSubmit)="onTypeSelectSubmit()"
@@ -35,22 +37,25 @@
 
   <div *ngIf="httpAnswer$ | async as data" [@inOutAnimation] class="solar-answer" #solarFacts>
     <p id="solar-introduction">
-      Wenn alle Dachflächen in <span class="fact">{{ selectedStadt }}</span> mit Solarenergie ausgebaut werden,
-      würde innerhalb eines Jahres:
-    </p>
-    <!-- {{data | json}} -->
-    <p class="flex-right">
-      <span class="fact">{{ data?.co2Einsparung | number: '1.0-0' }} t</span> CO-2 eingespart werden.
-    </p>
-    <p class="flex-left">
-      <span class="fact">{{ data.anteil | number: '1.0-0' }} % </span> der benötigten Energie aus Solarstrom
-      hergestellt werden.
+      Wenn alle Dachflächen in <span class="fact">{{ selectedStadt }}</span> mit Solarenergie
+      ausgebaut werden, würde innerhalb eines Jahres:
     </p>
 
-    <p class="flex-right">
-      Strom im Wert von <span class="fact">{{ data?.kostenEinsparung | number: '1.0-0' }}€</span> durch
-      Sonnenenergie hergestellt werden.
-    </p>
+    <div class="antworten">
+      <div class="mat-elevation-z2">
+        <img src="../assets/leaf-solid.png" alt="Bild eines Blattes" />
+        <span class="fact">{{ data?.co2Einsparung | number: '1.0-0' }} t</span> CO-2 gespart.
+      </div>
+      <div class="mat-elevation-z2">
+        <img src="../assets/plug-solid.png" alt="" />
+        <span class="fact">{{ data.anteil | number: '1.0-0' }} % </span> der Energie gedeckt.
+      </div>
+
+      <div class="mat-elevation-z2">
+        <img src="../assets/coins-solid.png" alt="" />
+        <span class="fact">{{ data?.kostenEinsparung | number: '1.0-0' }}€</span> gespart.
+      </div>
+    </div>
 
     <div id="moeglicheGebäude">
       <h3 class="mat-h3">Liste aller öffentlichen Gebäude mit geeigneten Dachflächen</h3>
@@ -60,16 +65,16 @@
             <mat-expansion-panel>
               <mat-expansion-panel-header>
                 <!-- Header -->
-                {{ b.name | utf8 }}
+                {{ b.name }}
               </mat-expansion-panel-header>
               <!-- Content -->
-              <div *ngIf="b.modarea">
+              <div class="collabse-container" *ngIf="b.modarea">
                 Geeignete Dachfläche: <span class="hint"> {{ b.modarea }} m²</span>
               </div>
-              <div *ngIf="b.anzahl_0">
+              <div class="collabse-container" *ngIf="b.anzahl_0">
                 Anzahl möglicher Solarmodule: <span class="hint"> {{ b.anzahl_0 }}</span>
               </div>
-              <div *ngIf="b.str_17">
+              <div class="collabse-container" *ngIf="b.str_17">
                 Möglicher Stromertrag: <span class="hint"> {{ b.str_17 }} kWh/a</span>
               </div>
             </mat-expansion-panel>
