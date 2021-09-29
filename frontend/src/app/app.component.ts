@@ -66,8 +66,7 @@ export class AppComponent implements OnInit {
   httpAnswer$: Observable<alldata> | undefined
   selectedStadt = ''
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onTypeSelectSubmit() {
     this.selectedStadt = this.stadtInput.value
@@ -94,12 +93,12 @@ export class AppComponent implements OnInit {
         schooling: true,
         kindergarten: true,
         security: true,
-        government: true
+        government: true,
       })
     )
     return combineLatest(call$, v$).pipe(
       map(([res, filter]: any) => {
-        const buildings = res.filter((b: building) => filter[b.type]);
+        const buildings = res.filter((b: building) => filter[b.type])
         const data: alldata = {
           buildings: buildings,
         }
@@ -108,18 +107,6 @@ export class AppComponent implements OnInit {
         data.co2Einsparung = (data.gesamtkwh * 366) / 1000 / 1000
         data.gesamtVerbrauch = 513
         data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch, data.gesamtkwh)
-        //Hier am besten ne Filterfunktion nehmen, war zu müde :D
-
-        // if (filter) {
-        //   console.log('Filter: ')
-        //   console.log(filter)
-        //   var builds = []
-        //   for (var build of data.buildings) {
-        //     if (!(build.type in filter)) builds.push(build)
-        //   }
-        //   data.buildings = builds
-        // }
-        // console.log(data.buildings[0].type)
         return data
       })
     ) as Observable<alldata>
@@ -132,13 +119,15 @@ export class AppComponent implements OnInit {
   }
 
   anteilAnGesamtVerbrauch(gesamtVerbrauch: number, potential: number): number {
-    console.log(gesamtVerbrauch, potential)
     return potential / 1000 / gesamtVerbrauch
   }
 
   berechnetGesamtKwha(buildings: building[], filters?: string[]): number {
-    return buildings.reduce((prev: building, curr: any) => {
-      return { ...curr, str_17: prev.str_17 + curr.str_17 }
-    }, {str_17: 0} as building).str_17
+    return buildings.reduce(
+      (prev: building, curr: any) => {
+        return { ...curr, str_17: prev.str_17 + curr.str_17 }
+      },
+      { str_17: 0 } as building
+    ).str_17
   }
 }
