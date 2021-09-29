@@ -46,13 +46,15 @@
 
   .flex-right {
     align-self: flex-end;
+    text-align: right;
   }
 
   .flex-left {
     align-self: flex-start;
+    text-align: left;
   }
 
-  span {
+  span.fact {
     font-size: xx-large;
     font-weight: 600;
     color: $primary;
@@ -68,4 +70,20 @@
   flex-direction: row;
   justify-content: space-around;
   width: 100%;
+}
+
+.collabsible {
+  margin-bottom: 10px;
+}
+
+span.hint {
+  font-size: x-large;
+  font-weight: 500;
+}
+
+#moeglicheGebäude {
+  margin-top: 20px;
+  h3 {
+    font-size: large;
+  }
 }
