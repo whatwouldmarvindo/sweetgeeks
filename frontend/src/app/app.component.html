@@ -1,6 +1,6 @@
 <div class="container" #container>
   <img src="../assets/logo.png" class="logo" />
-  <form class="search-field" #searchbar>
+  <form class="search-field" #searchbar (ngSubmit)="onSelectStadt()">
     <mat-form-field id="search" appearance="outline">
       <mat-label>Wähle eine Stadt in NRW</mat-label>
       <input
@@ -9,7 +9,6 @@
         aria-label="Wähle eine Stadt"
         [matAutocomplete]="auto"
         matInput
-        type="search"
       />
       <mat-autocomplete (optionSelected)="onSelectStadt()" #auto="matAutocomplete">
         <mat-option *ngFor="let stadt of filteredStaedte$ | async" [value]="stadt">
@@ -21,7 +20,7 @@
       *ngIf="httpAnswer$"
       class="typeSelectForm"
       [formGroup]="formGroup"
-      (ngSubmit)="onTypeSelectSubmit()"
+      (ngSubmit)="onSelectStadt()"
       ngNativeValidate
     >
       <mat-slide-toggle color="primary" formControlName="schooling">Bildungswesen</mat-slide-toggle>
@@ -37,8 +36,8 @@
 
   <div *ngIf="httpAnswer$ | async as data" [@inOutAnimation] class="solar-answer" #solarFacts>
     <p id="solar-introduction">
-      Wenn alle öffentlichen Dachflächen in <span class="fact">{{ selectedStadt }}</span> mit Solarenergie
-      ausgebaut werden, würden innerhalb eines Jahres:
+      Wenn alle öffentlichen Dachflächen in <span class="fact">{{ selectedStadt }}</span> mit
+      Solarenergie ausgebaut werden, würden innerhalb eines Jahres:
     </p>
 
     <div class="antworten">

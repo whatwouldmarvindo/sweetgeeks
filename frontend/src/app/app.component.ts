@@ -68,9 +68,8 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onTypeSelectSubmit() {
-    this.selectedStadt = this.stadtInput.value
-    this.httpAnswer$ = this.apiCall(this.selectedStadt.toLowerCase())
+  umlauteUmschreiben(word: string): string {
+    return word.toLowerCase().replace('ä', 'ae').replace('ü', 'ue').replace('ö', 'oe')
   }
 
   private _filter(name: string): String[] {
@@ -79,8 +78,8 @@ export class AppComponent implements OnInit {
   }
 
   onSelectStadt() {
-    this.selectedStadt = this.stadtInput.value
-    this.httpAnswer$ = this.apiCall(this.selectedStadt.toLowerCase())
+    this.selectedStadt = this.umlauteUmschreiben(this.stadtInput.value)
+    this.httpAnswer$ = this.apiCall(this.selectedStadt)
     this.cssAnimation()
   }
 
