@@ -5,6 +5,7 @@ import { startWith, map, skipWhile, tap } from 'rxjs/operators'
 import { Staedte } from './staedte'
 import { HttpClient } from '@angular/common/http'
 import { trigger, transition, style, animate } from '@angular/animations'
+import { environment } from 'src/environments/environment'
 
 export interface alldata {
   buildings: building[]
@@ -86,7 +87,7 @@ export class AppComponent implements OnInit {
   ngOnDestroy(): void {}
 
   apiCall(stadt: string, filter?: string[]): Observable<alldata> | undefined {
-    const call$ = this.http.get(`http://192.168.178.50:5000/api?cityName=${stadt.toLowerCase()}`)
+    const call$ = this.http.get(environment.FRONT_END_ADDRESS + `/api?cityName=${stadt.toLowerCase()}`)
     const v$ = this.formGroup.valueChanges.pipe(
       startWith({
         schooling: true,
