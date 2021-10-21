@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import response_builder
 import json
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
@@ -17,8 +18,19 @@ def test():
     return json.dumps(statistics)
 
 
+app.config['MYSQL_USER']        = 'root'
+app.config['MYSQL_PASSWORD']    = 'toor'
+app.config['MYSQL_HOST']        = 'localhost'
+app.config['MYSQL_DB']          = 'solarrechner-db'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+
+db = MySQL(app)
 
 
-
-
-
+@app.route('/databaseTest')
+def index():
+        cur = db.connection.cursor()
+        cur.execute('''select * from staedte;''')
+        results = cur.fetchall()
+        print(results)
+        return jsonify(results)
