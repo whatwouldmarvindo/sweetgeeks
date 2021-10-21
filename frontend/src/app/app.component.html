@@ -1,9 +1,10 @@
 <div class="container" #container>
   <img src="../assets/logo.png" class="logo" />
-  <form class="search-field" #searchbar (ngSubmit)="onSelectStadt()">
+  <div class="search-field" #searchbar (ngSubmit)="onSelectStadt()">
     <mat-form-field id="search" appearance="outline">
       <mat-label>Wähle eine Stadt in NRW</mat-label>
       <input
+        (keypress)="keypressed($event)"
         autofocus="autofocus"
         [formControl]="stadtInput"
         aria-label="Wähle eine Stadt"
@@ -17,7 +18,7 @@
       </mat-autocomplete>
     </mat-form-field>
     <form
-      *ngIf="httpAnswer$"
+      *ngIf="httpAnswer$ | async"
       class="typeSelectForm"
       [formGroup]="formGroup"
       (ngSubmit)="onSelectStadt()"
@@ -29,12 +30,10 @@
       >
       <mat-slide-toggle color="primary" formControlName="security">Sicherheit</mat-slide-toggle>
       <mat-slide-toggle color="primary" formControlName="government">Verwaltung</mat-slide-toggle>
-
-      <!-- <button mat-raised-button type="submit">TEST</button> -->
     </form>
-  </form>
+  </div>
 
-  <div *ngIf="httpAnswer$ | async as data" [@inOutAnimation] class="solar-answer" #solarFacts>
+  <div *ngIf="httpAnswer$ | async as data; else apiErrorDiv" [@inOutAnimation] class="solar-answer" #solarFacts>
     <p id="solar-introduction">
       Wenn alle öffentlichen Dachflächen in <span class="fact">{{ selectedStadt }}</span> mit
       Solarenergie ausgebaut werden, würden innerhalb eines Jahres:
@@ -82,4 +81,10 @@
       </ul>
     </div>
   </div>
+
+  <ng-template #apiErrorDiv>
+    <div *ngIf="apiError">
+      Something went wrong.... that's so unfortunate
+    </div>
+  </ng-template>
 </div>
