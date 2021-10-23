@@ -34,3 +34,33 @@ def index():
         results = cur.fetchall()
         print(results)
         return jsonify(results)
+
+@app.route('/getBuildings')
+def getBuildings(city_name):
+        cur = db.connection.cursor()
+        
+        cur.execute('''select * from gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+        results = cur.fetchall()
+        #print(results)
+        return jsonify(results)
+@app.route('/getCityDetails')
+def getCityDetails(city_name):
+        cur = db.connection.cursor()
+        city_name = request.args.get("cityName")
+        cur.execute('''select * from Staedte where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+        results = cur.fetchall()
+        #print(results)
+        return jsonify(results)
+
+@app.route('/GetCityData')
+def getCityData():
+    city_name = request.args.get("cityName")
+    cur = db.connection.cursor()
+    cur.execute('''select * from Staedte where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+    results1 = cur.fetchall()
+    cur = db.connection.cursor()
+    cur.execute('''select * from gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+    results2 = cur.fetchall()
+    out = results1+results2
+
+    return jsonify(out)
