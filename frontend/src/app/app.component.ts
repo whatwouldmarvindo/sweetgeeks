@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms'
-import { combineLatest, Observable } from 'rxjs'
-import { startWith, map, skipWhile, tap } from 'rxjs/operators'
+import { combineLatest, Observable, of, throwError } from 'rxjs'
+import { startWith, map, skipWhile, tap, catchError } from 'rxjs/operators'
 import { Staedte } from './staedte'
 import { HttpClient } from '@angular/common/http'
 import { trigger, transition, style, animate } from '@angular/animations'
@@ -63,6 +63,7 @@ export class AppComponent implements OnInit {
     skipWhile((v) => v.length < 1),
     map((stadt) => (stadt ? this._filter(stadt) : Staedte.slice()))
   )
+  apiError: boolean = false
   constructor(private http: HttpClient, private fb: FormBuilder) {}
   httpAnswer$: Observable<alldata> | undefined
   selectedStadt = ''
@@ -73,6 +74,12 @@ export class AppComponent implements OnInit {
     return word.toLowerCase().replace('ä', 'ae').replace('ü', 'ue').replace('ö', 'oe')
   }
 
+  keypressed(event: KeyboardEvent) {
+    if (event.key == "Enter") {
+      this.onSelectStadt()
+    }
+  }
+
   private _filter(name: string): String[] {
     const filterValue = name.toLowerCase()
     return Staedte.filter((option) => option.toLowerCase().includes(filterValue))
@@ -80,6 +87,7 @@ export class AppComponent implements OnInit {
 
   onSelectStadt() {
     this.selectedStadt = this.umlauteUmschreiben(this.stadtInput.value)
+    this.apiError = false
     this.httpAnswer$ = this.apiCall(this.selectedStadt)
     this.cssAnimation()
   }
@@ -87,6 +95,9 @@ export class AppComponent implements OnInit {
   ngOnDestroy(): void {}
 
   apiCall(stadt: string, filter?: string[]): Observable<alldata> | undefined {
+    if (!Staedte.includes(this.stadtInput.value)) {
+      throw new Error("Not a valid city was selected");
+    }
     const call$ = this.http.get(environment.FRONT_END_ADDRESS + `/api?cityName=${stadt.toLowerCase()}`)
     const v$ = this.formGroup.valueChanges.pipe(
       startWith({
@@ -96,7 +107,11 @@ export class AppComponent implements OnInit {
         government: true,
       })
     )
-    return combineLatest(call$, v$).pipe(
+    return combineLatest([call$, v$]).pipe(
+      catchError(err => {
+        this.apiError = true;
+        return throwError(err);
+      }),
       map(([res, filter]: any) => {
         const buildings = res.filter((b: building) => filter[b.type])
         const data: alldata = {
@@ -109,7 +124,7 @@ export class AppComponent implements OnInit {
         if(stadt.toLowerCase() == 'juechen') data.gesamtVerbrauch = 188
         data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch as number, data.gesamtkwh)
         return data
-      })
+      }),
     ) as Observable<alldata>
   }
 
