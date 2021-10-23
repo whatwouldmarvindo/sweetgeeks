@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  FRONT_END_ADDRESS: "http://localhost:5000"
+  BACK_END_ADDRESS: "http://localhost:5000"
 };
 
 /*

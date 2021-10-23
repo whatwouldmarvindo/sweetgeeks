@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
     if (!Staedte.includes(this.stadtInput.value)) {
       throw new Error("Not a valid city was selected");
     }
-    const call$ = this.http.get(environment.FRONT_END_ADDRESS + `/api?cityName=${stadt.toLowerCase()}`)
+    const call$ = this.http.get(environment.BACK_END_ADDRESS + `/api?cityName=${stadt.toLowerCase()}`)
     const v$ = this.formGroup.valueChanges.pipe(
       startWith({
         schooling: true,
