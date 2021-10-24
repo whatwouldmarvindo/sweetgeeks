@@ -20,15 +20,17 @@ def test():
 
 app.config['MYSQL_USER']        = 'root'
 app.config['MYSQL_PASSWORD']    = 'toor'
-app.config['MYSQL_HOST']        = 'localhost'
-app.config['MYSQL_DB']          = 'solarrechner-db'
+app.config['MYSQL_HOST']        = '0.0.0.0'
+app.config['MYSQL_DB']          = 'solarrechnerDB'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 db = MySQL(app)
-
+@app.route('/')
+def index():
+        return "TEST"
 
 @app.route('/databaseTest')
-def index():
+def databaseTest():
         cur = db.connection.cursor()
         cur.execute('''select * from staedte;''')
         results = cur.fetchall()
@@ -59,7 +61,7 @@ def getCityData():
     cur.execute('''select * from Staedte where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
     results1 = cur.fetchall()
     cur = db.connection.cursor()
-    cur.execute('''select * from gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+    cur.execute('''select * from Gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
     results2 = cur.fetchall()
     out = results1+results2
 
