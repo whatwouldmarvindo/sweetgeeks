@@ -1,0 +1,11 @@
+Build Docker Image from Mysql Database:
+docker build -t solarrechner_db ./
+
+Save image to tar file:
+docker save -o ./TAR/solarrechnerDB.tar solarrechner_db
+
+Load image from tar file:
+docker load -i ./solarrechnerDB.tar 
+
+Create Docker container from image:
+docker run -p 3306:3306 --name solarrechnerDB -e MYSQL_ROOT_PASSWORD=iysKhoHdUJzlUlwJertM solarrechner_db
