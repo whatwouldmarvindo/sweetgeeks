@@ -3,6 +3,8 @@ import response_builder
 import json
 from flask_mysqldb import MySQL
 import os
+import json
+import collections
 
 app = Flask(__name__)
 
@@ -39,17 +41,39 @@ def databaseTest():
         return jsonify(results)
 
 @app.route('/getBuildings')
-def getBuildings(city_name):
-        cur = db.connection.cursor()
-        
-        cur.execute('''select * from gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
-        results = cur.fetchall()
-        #print(results)
-        return jsonify(results)
-@app.route('/getCityDetails')
-def getCityDetails(city_name):
-        cur = db.connection.cursor()
+def getBuildings():
         city_name = request.args.get("cityName")
+        cur = db.connection.cursor()
+        cur.execute('''select * from gebaeude where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
+        rows = cur.fetchall()
+        
+
+
+        
+        objects_list = []
+        for row in rows:
+                d = collections.OrderedDict()
+                d["name"] = row[2]
+                d["address"] = row[3]
+                d["type"] = row[4]
+                d["modarea"] = row[5]
+                d["radabs"] = row[6]
+                d["kwh_kwp"] = row[7]
+                d["anzahl_0"] = row[8]
+                d["kw_17"] = row[9]
+                d["str_17"] = row[10]
+
+
+                objects_list.append(d)
+
+        j = json.dumps(objects_list)
+       # print(j)
+
+        return j
+@app.route('/getCityDetails')
+def getCityDetails():
+        city_name = request.args.get("cityName")
+        cur = db.connection.cursor()
         cur.execute('''select * from Staedte where StadtID = (Select StadtID from Staedte where Name= \'''' + city_name +  '''\');''')
         results = cur.fetchall()
         #print(results)

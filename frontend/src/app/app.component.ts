@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
     if (!Staedte.includes(this.stadtInput.value)) {
       throw new Error("Not a valid city was selected");
     }
-    const call$ = this.http.get(environment.BACK_END_ADDRESS + `/api?cityName=${stadt.toLowerCase()}`)
+    const callBuildings$ = this.http.get(environment.BACK_END_ADDRESS + `/getBuildings?cityName=${stadt.toLowerCase()}`)
     const v$ = this.formGroup.valueChanges.pipe(
       startWith({
         schooling: true,
@@ -107,7 +107,7 @@ export class AppComponent implements OnInit {
         government: true,
       })
     )
-    return combineLatest([call$, v$]).pipe(
+    return combineLatest([callBuildings$, v$]).pipe(
       catchError(err => {
         this.apiError = true;
         return throwError(err);
@@ -120,7 +120,17 @@ export class AppComponent implements OnInit {
         data.gesamtkwh = this.berechnetGesamtKwha(buildings)
         data.kostenEinsparung = data.gesamtkwh * 0.31
         data.co2Einsparung = (data.gesamtkwh * 366) / 1000 / 1000
-        if(stadt.toLowerCase() == 'grevenbroich') data.gesamtVerbrauch = 513
+        const callCityDetails$ = this.http.get(environment.BACK_END_ADDRESS + `/getCityDetails?cityName=${stadt.toLowerCase()}`).toPromise()
+        .then(res  => {
+          console.log(res)
+         
+            
+            
+    
+        });
+        
+      console.log(callCityDetails$)
+        if(stadt.toLowerCase() == 'grevenbroich') data.gesamtVerbrauch = 513 // TODO: API CALL
         if(stadt.toLowerCase() == 'juechen') data.gesamtVerbrauch = 188
         data.anteil = this.anteilAnGesamtVerbrauch(data.gesamtVerbrauch as number, data.gesamtkwh)
         return data
@@ -136,7 +146,7 @@ export class AppComponent implements OnInit {
 
   anteilAnGesamtVerbrauch(gesamtVerbrauch: number, potential: number): number {
     return potential / 1000 / gesamtVerbrauch
-  }
+  } 
 
   berechnetGesamtKwha(buildings: building[], filters?: string[]): number {
     return buildings.reduce(
